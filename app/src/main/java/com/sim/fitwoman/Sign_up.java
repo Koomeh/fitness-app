@@ -10,8 +10,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ResponseDelivery;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -21,6 +24,7 @@ import com.sim.fitwoman.utils.WSadressIP;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -28,10 +32,13 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class Sign_up extends AppCompatActivity {
-    Button btnLogin;
+public class Sign_up extends AppCompatActivity implements Response.Listener, Response.ErrorListener {
+    Button btnCreateAccount;
     EditText etName , etEmail , etPwd, etMobileNo;
-    private String REGISTRATION_API_URL = "http://10.0.2.2/fitness/api/registration.php";
+    //private String REGISTRATION_API_URL = "http://10.0.2.2:8000/fitness/api/registration.php";
+    private String REGISTRATION_API_URL = "http://192.168.226.222/fitness/api/registration.php";
+    private RequestQueue mQueue;
+    public static final String REQUEST_TAG = "SignupActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,17 +59,34 @@ public class Sign_up extends AppCompatActivity {
             }
         });
 
-        btnLogin = (Button) findViewById(R.id.email_sign_up_button);
+        btnCreateAccount = (Button) findViewById(R.id.email_sign_up_button);
         etName = (EditText) findViewById(R.id.input_name);
         etEmail = (EditText) findViewById(R.id.email);
         etPwd = (EditText) findViewById(R.id.password);
         etMobileNo = (EditText) findViewById(R.id.mobileno);
+
+
+/*        mQueue = CustomVolleyRequestQueue.getInstance(this.getApplicationContext())
+                .getRequestQueue();
+        String url = "http://api.openweathermap.org/data/2.5/weather?q=London,uk";
+        final CustomJSONObjectRequest jsonRequest = new CustomJSONObjectRequest(Request.Method
+                .POST, REGISTRATION_API_URL,
+                new JSONObject(), this, this);
+
+
+        jsonRequest.setTag(REQUEST_TAG);
+        btnCreateAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mQueue.add(jsonRequest);
+            }
+        });*/
         RegisterProcess();
     }
     void RegisterProcess(){
 
 
-        btnLogin.setOnClickListener(
+        btnCreateAccount.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -78,9 +102,6 @@ public class Sign_up extends AppCompatActivity {
                     }
                 }
         );
-
-
-
     }
 
 
@@ -139,15 +160,19 @@ public class Sign_up extends AppCompatActivity {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                if(response.contains("success")) {
+                try {
+                    JSONObject json = new JSONObject(response);
+                    //if (json.getString("success")) {
 
-                    ////////////////////////////////////
-                    Intent intent = new Intent("com.sim.fitwoman.MainActivity");
+                        Toast.makeText(getBaseContext(), json.getString("message"), Toast.LENGTH_LONG);
+                        Intent intent = new Intent(Sign_up.this, MainActivity.class);
 
-
-                    startActivity(intent);
-                    ////////////////////
+                        startActivity(intent);
+                        ////////////////////
+                    //}
                 }
+                catch (JSONException ex)
+                {}
             }
         }, new Response.ErrorListener() {
             @Override
@@ -168,10 +193,53 @@ public class Sign_up extends AppCompatActivity {
                 return params;
             }
         };
-
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         MySingleton.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
     }
+
+
+/*    @Override
+    protected void onStart() {
+        super.onStart();
+        // Instantiate the RequestQueue.
+        mQueue = CustomVolleyRequestQueue.getInstance(this.getApplicationContext())
+                .getRequestQueue();
+        String url = "http://api.openweathermap.org/data/2.5/weather?q=London,uk";
+        final CustomJSONObjectRequest jsonRequest = new CustomJSONObjectRequest(Request.Method
+                .GET, url,
+                new JSONObject(), this, this);
+        jsonRequest.setTag(REQUEST_TAG);
+        btnCreateAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mQueue.add(jsonRequest);
+            }
+        });
+    }*/
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mQueue != null) {
+            mQueue.cancelAll(REQUEST_TAG);
+        }
+    }
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        String message = error.getMessage();
+       // mTextView.setText(error.getMessage());
+    }
+    @Override
+    public void onResponse(Object response) {
+        String message = response.toString();
+//        mTextView.setText("Response is: " + response);
+//        try {
+//            mTextView.setText(mTextView.getText() + "\n\n" + ((JSONObject) response).getString
+//                    ("name"));
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+    }
 }
-
-
-

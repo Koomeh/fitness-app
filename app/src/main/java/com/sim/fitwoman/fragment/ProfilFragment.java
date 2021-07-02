@@ -30,10 +30,10 @@ import com.sim.fitwoman.R;
 import com.sim.fitwoman.updateData;
 import com.sim.fitwoman.updateWeight;
 import com.sim.fitwoman.utils.WSadressIP;
-import com.facebook.AccessToken;
+/*import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.HttpMethod;
+import com.facebook.HttpMethod;*/
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -183,7 +183,7 @@ public class ProfilFragment extends Fragment {
 
         //7: show facebook profil picture
 
-        if(!SPPhoto.equals("nothibg")) {
+        /*if(!SPPhoto.equals("nothibg")) {
          Bundle params = new Bundle();
         params.putString("fields", "id,email,gender,cover,picture.type(large)");
         new GraphRequest(AccessToken.getCurrentAccessToken(), "me", params, HttpMethod.GET,
@@ -205,7 +205,7 @@ public class ProfilFragment extends Fragment {
                     }
                 }).executeAsync();
          ////////////////
-         }
+         }*/
         return v;
 
     }

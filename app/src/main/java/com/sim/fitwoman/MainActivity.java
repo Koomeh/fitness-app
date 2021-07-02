@@ -13,7 +13,9 @@ import android.widget.Toast;
 
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
@@ -22,7 +24,7 @@ import com.sim.fitwoman.R;
 import com.sim.fitwoman.model.User;
 import com.sim.fitwoman.service.MySingleton;
 import com.sim.fitwoman.utils.WSadressIP;
-import com.facebook.AccessToken;
+/*import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -30,7 +32,7 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.Profile;
 import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
+import com.facebook.login.widget.LoginButton;*/
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,21 +46,20 @@ import java.util.Locale;
 import java.util.Map;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  {
  EditText txtEmail, txtPwd;
  Button btnLogin;
  TextView txtSignUp;
+    //private String LOGIN_REGISTRATION_API_URL = "http://10.0.2.2:8000/fitness/api/login.php";
+    private String LOGIN_REGISTRATION_API_URL = "http://192.168.226.222/fitness/api/login.php";
+    private RequestQueue mQueue;
+    public static final String REQUEST_TAG = "LoginActivity";
 
-
- //logeD User
-
-
-
-private LoginButton loginButton;
-private CallbackManager callbackManager;
+//private LoginButton loginButton;
+    //private CallbackManager callbackManager;
      String FBEmail = "email";
     String FBName = "email";
-    String FBId = "id";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +67,7 @@ private CallbackManager callbackManager;
 
 
 
-        callbackManager = CallbackManager.Factory.create();
+/*        callbackManager = CallbackManager.Factory.create();
         if(AccessToken.getCurrentAccessToken() != null){  //SKIP login if user already signed with FB
 
             /////////////// SET DATA LOGED USER// NO NEED
@@ -100,37 +101,78 @@ private CallbackManager callbackManager;
             }
 
 
-        });
+        });*/
         ///////////////
         //Solving thread problem
-        if (android.os.Build.VERSION.SDK_INT > 9)
+       /* if (android.os.Build.VERSION.SDK_INT > 9)
         {
             StrictMode.ThreadPolicy policy = new
                     StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
-        }
+        }*/
         /////
         txtEmail= findViewById(R.id.MName);
         txtPwd= findViewById(R.id.MEmail);
         btnLogin =  findViewById(R.id.button);
         txtSignUp = findViewById(R.id.signUpTextView);
 
-
-
-
-        //Intent intent = new Intent(this, Home.class);
-        //startActivity(intent);
-        //LoginAndGoToIMC();
+        btnLogin.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        loginUser();
+                    }
+                }
+        );
         goToSignUp();
     }
 
-    //For FB Login
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        callbackManager.onActivityResult(requestCode, resultCode, data);
-        super.onActivityResult(requestCode, resultCode, data);
-    }
 
+    public void loginUser(){
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, LOGIN_REGISTRATION_API_URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject json = new JSONObject(response);
+                    //if (json.getString("success")) {
+                    String errorFound = json.getString("errorfound");
+                    if(json.getString("errorfound").equals("0")) {
+                        Intent intent = new Intent(MainActivity.this, Home.class);
+                        startActivity(intent);
+                        Toast.makeText(getBaseContext(), json.getString("message"), Toast.LENGTH_LONG).show();
+                    }
+                    else
+                    {
+                        Toast.makeText(getApplicationContext(), json.getString("message"), Toast.LENGTH_LONG).show();
+                    }
+                    ////////////////////
+                    //}
+                }
+                catch (JSONException ex)
+                {}
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(),"failed to Register",Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("Content-Type","application/x-www-form-urlencoded");
+                params.put("Email", txtEmail.getText().toString());
+                params.put("Password",txtPwd.getText().toString());
+                //params.put("photo", "nothing");
+                return params;
+            }
+        };
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        MySingleton.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
+    }
 
     void  goToSignUp(){
         txtSignUp.setOnClickListener(
@@ -216,7 +258,7 @@ private CallbackManager callbackManager;
     }
 
 
-    public void MarwaFBLogin(LoginResult loginResult){
+/*    public void MarwaFBLogin(LoginResult loginResult){
         AccessToken accessToken = loginResult.getAccessToken();
         Profile profile = Profile.getCurrentProfile();
 
@@ -251,7 +293,7 @@ private CallbackManager callbackManager;
         request.setParameters(parameters);
         request.executeAsync();
 
-    }
+    }*/
 
 
     public void InsertUserInDB(final String UserName, final String UserEmail , final String loginType, final String idid){
