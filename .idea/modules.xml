@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/FitnessForWomen-Android-Java.iml" filepath="$PROJECT_DIR$/.idea/modules/FitnessForWomen-Android-Java.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FitnessForWomen-Android-Java.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FitnessForWomen-Android-Java.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/fitness-app.iml" filepath="$PROJECT_DIR$/.idea/modules/fitness-app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/fitness-app.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/fitness-app.app.iml" />
     </modules>
   </component>
 </project>

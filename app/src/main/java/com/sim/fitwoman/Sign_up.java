@@ -35,8 +35,8 @@ import java.util.Map;
 public class Sign_up extends AppCompatActivity implements Response.Listener, Response.ErrorListener {
     Button btnCreateAccount;
     EditText etName , etEmail , etPwd, etMobileNo;
-    //private String REGISTRATION_API_URL = "http://10.0.2.2:8000/fitness/api/registration.php";
-    private String REGISTRATION_API_URL = "http://192.168.226.222/fitness/api/registration.php";
+    private String REGISTRATION_API_URL = "http://10.0.2.2:8000/fitness/api/registration.php";
+    //private String REGISTRATION_API_URL = "http://192.168.226.222/fitness/api/registration.php";
     private RequestQueue mQueue;
     public static final String REQUEST_TAG = "SignupActivity";
 
