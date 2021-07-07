@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity  {
  Button btnLogin;
  TextView txtSignUp;
     //private String LOGIN_REGISTRATION_API_URL = "http://10.0.2.2:8000/fitness/api/login.php";
-    private String LOGIN_REGISTRATION_API_URL = "http://192.168.226.222/fitness/api/login.php";
+    private String LOGIN_REGISTRATION_API_URL = "http://192.168.198.222/fitness/api/login.php";
     private RequestQueue mQueue;
     public static final String REQUEST_TAG = "LoginActivity";
 

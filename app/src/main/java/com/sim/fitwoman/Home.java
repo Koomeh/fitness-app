@@ -74,14 +74,7 @@ private DrawerLayout drawer;
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
                     navigationView.setCheckedItem(R.id.nav_home);
                 }
-
-
         }
-
-
-
-
-
     }
 
     @Override

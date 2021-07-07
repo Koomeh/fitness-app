@@ -42,6 +42,7 @@ public class FitnessFragment extends Fragment {
     ListView lv;
     List<MFitness> lstcc;
     private static final String URL_Activities = "http://"+ WSadressIP.WSIP+"/FitWomanServices/MgetWorkoutByBMI.php";
+    private String WORK_OUTS_API_URL = "http://192.168.198.222/fitness/api/get-workouts.php";
     String SharedPrefBMI ;
     TextView title;
 
@@ -111,7 +112,7 @@ public class FitnessFragment extends Fragment {
     private void loadActivities() {
 
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_Activities,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, WORK_OUTS_API_URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
