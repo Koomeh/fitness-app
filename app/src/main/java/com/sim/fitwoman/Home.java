@@ -23,9 +23,7 @@ import com.sim.fitwoman.fragment.ProfilFragment;
 
 
 public class Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
-
-
-
+    
 private DrawerLayout drawer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
