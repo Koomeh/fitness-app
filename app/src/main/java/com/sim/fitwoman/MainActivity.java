@@ -3,6 +3,7 @@ package com.sim.fitwoman;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.StrictMode;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -48,18 +49,18 @@ import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity  {
- EditText txtEmail, txtPwd;
- Button btnLogin;
- TextView txtSignUp;
+    EditText txtEmail, txtPwd;
+    Button btnLogin;
+    TextView txtSignUp;
     private String LOGIN_REGISTRATION_API_URL = "http://10.0.2.2:8012/fitness/api/login.php";
     //private String LOGIN_REGISTRATION_API_URL = "http://192.168.38.222/fitness/api/login.php";
     //private String LOGIN_REGISTRATION_API_URL = "http://192.168.0.101/fitness/api/registration.php";
     private RequestQueue mQueue;
     public static final String REQUEST_TAG = "LoginActivity";
 
-//private LoginButton loginButton;
+    //private LoginButton loginButton;
     //private CallbackManager callbackManager;
-     String FBEmail = "email";
+    String FBEmail = "email";
     String FBName = "email";
 
     @Override
@@ -71,14 +72,11 @@ public class MainActivity extends AppCompatActivity  {
 
 /*        callbackManager = CallbackManager.Factory.create();
         if(AccessToken.getCurrentAccessToken() != null){  //SKIP login if user already signed with FB
-
             /////////////// SET DATA LOGED USER// NO NEED
             User.session = new User();
             User.session.setId(4);
             /////////////////////:
-
             Intent intent = new Intent("com.sim.fitwoman.Home");
-
             startActivity(intent);
         }
         loginButton = (LoginButton) findViewById(R.id.login_button);
@@ -89,20 +87,15 @@ public class MainActivity extends AppCompatActivity  {
             public void onSuccess(LoginResult loginResult) {
                 ///////////////
                 MarwaFBLogin(loginResult);
-
             }
-
             @Override
             public void onCancel() {
                Toast.makeText(getApplicationContext(),"u canceled", Toast.LENGTH_SHORT).show();
             }
-
             @Override
             public void onError(FacebookException error) {
                 Toast.makeText(getApplicationContext(),"fixe ur error before", Toast.LENGTH_SHORT).show();
             }
-
-
         });*/
         ///////////////
         //Solving thread problem
@@ -139,6 +132,22 @@ public class MainActivity extends AppCompatActivity  {
                     //if (json.getString("success")) {
                     String errorFound = json.getString("errorfound");
                     if(json.getString("errorfound").equals("0")) {
+                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                        SharedPreferences.Editor editor = preferences.edit();
+
+                        editor.putString("UserId",json.getString("UserId"));
+                        editor.putString("MembershipId",json.getString("MembershipId"));
+                        editor.putString("Name",json.getString("Name"));
+                        editor.putString("UserType",json.getString("UserType"));
+                        editor.putString("Email",json.getString("Email"));
+                        editor.putString("Password",json.getString("Password"));
+                        editor.putString("MobileNo",json.getString("MobileNo"));
+                        editor.putString("CreatedDate",json.getString("CreatedDate"));
+                        editor.putString("Age",json.getString("Age"));
+                        editor.putString("Weight",json.getString("Weight"));
+                        editor.putString("Height",json.getString("Height"));
+                        editor.putString("BMI",json.getString("BMI"));
+                        editor.apply();
                         Intent intent = new Intent(MainActivity.this, Home.class);
                         startActivity(intent);
                         Toast.makeText(getBaseContext(), json.getString("message"), Toast.LENGTH_LONG).show();
@@ -197,7 +206,7 @@ public class MainActivity extends AppCompatActivity  {
                     @Override
                     public void onClick(View v) {
 
-                       /////////////////////////////
+                        /////////////////////////////
                         StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://"+ WSadressIP.WSIP+"/FitWomanServices/UserEmailPasswordExist.php",
                                 new Response.Listener<String>() {
                                     @Override
@@ -207,14 +216,14 @@ public class MainActivity extends AppCompatActivity  {
                                             JSONArray array = new JSONArray(response);
                                             if(array.length() != 0){
                                                 ////////////////////////////////////
-                                              //  for (int i = 0; i < array.length(); i++) {
+                                                //  for (int i = 0; i < array.length(); i++) {
 
 
-                                                    JSONObject product = array.getJSONObject(0);
+                                                JSONObject product = array.getJSONObject(0);
 
 
-                                                  //  new User(product.getString("name"));
-                                              //  }
+                                                //  new User(product.getString("name"));
+                                                //  }
                                                 Intent intent = new Intent("com.sim.fitwoman.IMC");
                                                 intent.putExtra("userName", product.getString("name")); //this 2 lines for pass the values to the next activity
                                                 intent.putExtra("userEmail", txtEmail.getText().toString());
@@ -263,7 +272,6 @@ public class MainActivity extends AppCompatActivity  {
 /*    public void MarwaFBLogin(LoginResult loginResult){
         AccessToken accessToken = loginResult.getAccessToken();
         Profile profile = Profile.getCurrentProfile();
-
         // Facebook Email address
         GraphRequest request = GraphRequest.newMeRequest(
                 loginResult.getAccessToken(),
@@ -273,18 +281,13 @@ public class MainActivity extends AppCompatActivity  {
                             JSONObject object,
                             GraphResponse response) {
                         Log.v("LoginActivity Response ", response.toString());
-
                         try {
                             FBName = object.getString("name");
-
                             FBEmail = object.getString("email");
                             FBId = object.getString("id");
                             Log.v("Email = ", " " + FBEmail);
                             InsertUserInDB(FBName , FBEmail , "FB",FBId);
-
                             //Toast.makeText(getApplicationContext(), "Name " + FBName+ " email "+ FBEmail, Toast.LENGTH_LONG).show();
-
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -294,7 +297,6 @@ public class MainActivity extends AppCompatActivity  {
         parameters.putString("fields", "id,name,email,gender, birthday");
         request.setParameters(parameters);
         request.executeAsync();
-
     }*/
 
 

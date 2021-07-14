@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -68,28 +69,54 @@ public class ProfilFragment extends Fragment {
 
         //set weight
         showWeight = v.findViewById(R.id.textView45);
-        SPweight = showWeight.getText().toString();
-        //showWeight.setText(SPweight);
+        //SPweight = showWeight.getText().toString();
+        showWeight.setText(SPweight);
 
         //set height
         showHeight = v.findViewById(R.id.textView41);
-        SPheight = showHeight.getText().toString();
-        //showHeight.setText(SPheight);
+        //SPheight = showHeight.getText().toString();
+        showHeight.setText(SPheight);
 
         //set bmi
         showBMI = v.findViewById(R.id.textView14);
-        String CalculateBMI = getCalculateBMI(SPweight,SPheight);
-        showBMI.setText(CalculateBMI);
+        //String CalculateBMI = getCalculateBMI(SPweight,SPheight);
+        showBMI.setText(SPBMI);
 
-        //set the weight satus
-        showStatus = v.findViewById(R.id.textView11);
-        if(SPBMI.equals("1")){
-            showStatus.setText("Under Weight");
-        } else  if(SPBMI.equals("2")){
-            showStatus.setText("Normal Weight");
-        } else  if(SPBMI.equals("3")){
-            showStatus.setText("Over Weight");
+        double dBMI = 0;
+        try {
+            dBMI = Double.parseDouble(SPBMI);
         }
+        catch (NumberFormatException e)
+        {
+            dBMI = 0;
+        }
+
+        showStatus = v.findViewById(R.id.textView11);
+        if(dBMI >= 30)
+        {
+            showStatus.setText("Obese");
+            showStatus.setTextColor(255);
+            showStatus.setTypeface(null, Typeface.BOLD);
+        }
+        else if(dBMI >= 25)
+        {
+            showStatus.setText("Overweight");
+            showStatus.setTextColor(255);
+            showStatus.setTypeface(null, Typeface.BOLD);
+        }
+        else if(dBMI >= 18.5)
+        {
+            showStatus.setText("Normal Weight");
+            showStatus.setTextColor(16777215);
+            showStatus.setTypeface(null, Typeface.BOLD);
+        }
+        else
+        {
+            showStatus.setText("Underweight");
+            showStatus.setTextColor(255);
+            showStatus.setTypeface(null, Typeface.BOLD);
+        }
+        //set the weight satus
 
         //2: add weight for this day
         btngo =  v.findViewById(R.id.button2);
@@ -220,11 +247,11 @@ public class ProfilFragment extends Fragment {
 
         // get data from Shared preferences
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        SPname = preferences.getString("name", "");
-        SPemail = preferences.getString("email", "");
-        SPweight = preferences.getString("weight", "");
-        SPheight = preferences.getString("height", "");
-        SPBMI = preferences.getString("bmi", "");
+        SPname = preferences.getString("Name", "");
+        SPemail = preferences.getString("Email", "");
+        SPweight = preferences.getString("Weight", "");
+        SPheight = preferences.getString("Height", "");
+        SPBMI = preferences.getString("BMI", "");
         SPPhoto = preferences.getString("photo", "");
         if (getArguments() != null) {
 
