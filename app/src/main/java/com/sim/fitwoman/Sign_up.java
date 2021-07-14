@@ -34,9 +34,10 @@ import java.util.Map;
 
 public class Sign_up extends AppCompatActivity implements Response.Listener, Response.ErrorListener {
     Button btnCreateAccount;
-    EditText etName , etEmail , etPwd, etMobileNo;
-    //private String REGISTRATION_API_URL = "http://10.0.2.2:8000/fitness/api/registration.php";
-    private String REGISTRATION_API_URL = "http://192.168.198.222/fitness/api/registration.php";
+    EditText etName , etEmail , etPwd, etMobileNo, etAge, etWeight, etHeight;
+    private String REGISTRATION_API_URL = "http://10.0.2.2:8012/fitness/api/registration.php";
+    //private String REGISTRATION_API_URL = "http://192.168.198.222/fitness/api/registration.php";
+    //private String REGISTRATION_API_URL = "http://192.168.0.101/fitness/api/registration.php";
     private RequestQueue mQueue;
     public static final String REQUEST_TAG = "SignupActivity";
 
@@ -64,6 +65,9 @@ public class Sign_up extends AppCompatActivity implements Response.Listener, Res
         etEmail = (EditText) findViewById(R.id.email);
         etPwd = (EditText) findViewById(R.id.password);
         etMobileNo = (EditText) findViewById(R.id.mobileno);
+        etAge = (EditText) findViewById(R.id.age);
+        etWeight = (EditText) findViewById(R.id.weight);
+        etHeight = (EditText) findViewById(R.id.height);
 
 
 /*        mQueue = CustomVolleyRequestQueue.getInstance(this.getApplicationContext())
@@ -87,20 +91,20 @@ public class Sign_up extends AppCompatActivity implements Response.Listener, Res
 
 
         btnCreateAccount.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                    if(!etName.getText().toString().equals("") && !etEmail.getText().toString().equals("") && !etPwd.getText().toString().equals("")){
+            new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                if(!etName.getText().toString().equals("") && !etEmail.getText().toString().equals("") && !etPwd.getText().toString().equals("")){
 
-                        //dontExist();
-                        addThisUser();
+                    //dontExist();
+                    addThisUser();
 
-                    }else{
-                    Toast.makeText(getApplicationContext(),"Fill all data before register",Toast.LENGTH_SHORT).show();
-                    }
-
-                    }
+                }else{
+                Toast.makeText(getApplicationContext(),"Fill all data before register",Toast.LENGTH_SHORT).show();
                 }
+
+                }
+            }
         );
     }
 
@@ -189,6 +193,9 @@ public class Sign_up extends AppCompatActivity implements Response.Listener, Res
                 params.put("Password",etPwd.getText().toString());
                 params.put("MobileNo",etMobileNo.getText().toString());
                 params.put("UserType", "User");
+                params.put("Age",etAge.getText().toString());
+                params.put("Weight",etWeight.getText().toString());
+                params.put("Height",etHeight.getText().toString());
                 //params.put("photo", "nothing");
                 return params;
             }

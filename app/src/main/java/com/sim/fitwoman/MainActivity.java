@@ -1,6 +1,7 @@
 package com.sim.fitwoman;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -50,8 +51,9 @@ public class MainActivity extends AppCompatActivity  {
  EditText txtEmail, txtPwd;
  Button btnLogin;
  TextView txtSignUp;
-    //private String LOGIN_REGISTRATION_API_URL = "http://10.0.2.2:8000/fitness/api/login.php";
-    private String LOGIN_REGISTRATION_API_URL = "http://192.168.38.222/fitness/api/login.php";
+    private String LOGIN_REGISTRATION_API_URL = "http://10.0.2.2:8012/fitness/api/login.php";
+    //private String LOGIN_REGISTRATION_API_URL = "http://192.168.38.222/fitness/api/login.php";
+    //private String LOGIN_REGISTRATION_API_URL = "http://192.168.0.101/fitness/api/registration.php";
     private RequestQueue mQueue;
     public static final String REQUEST_TAG = "LoginActivity";
 

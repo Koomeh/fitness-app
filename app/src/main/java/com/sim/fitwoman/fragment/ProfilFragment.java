@@ -68,11 +68,13 @@ public class ProfilFragment extends Fragment {
 
         //set weight
         showWeight = v.findViewById(R.id.textView45);
-        showWeight.setText(SPweight);
+        SPweight = showWeight.getText().toString();
+        //showWeight.setText(SPweight);
 
         //set height
         showHeight = v.findViewById(R.id.textView41);
-        showHeight.setText(SPheight);
+        SPheight = showHeight.getText().toString();
+        //showHeight.setText(SPheight);
 
         //set bmi
         showBMI = v.findViewById(R.id.textView14);
