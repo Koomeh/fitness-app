@@ -30,7 +30,6 @@
             android:id="@+id/editText313"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="30dp"
             android:layout_marginTop="30dp"
             android:drawableLeft="@drawable/mcacke"
             android:ems="10"
@@ -38,13 +37,6 @@
             android:inputType="number"
             tools:layout_editor_absoluteX="64dp"
             tools:layout_editor_absoluteY="48dp" />
-
-        <TextView
-            android:id="@+id/textView48"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="OR/AND" />
 
         <EditText
             android:id="@+id/editText3456"
@@ -55,6 +47,17 @@
             android:ems="10"
             android:hint="Height in cm"
             android:inputType="numberDecimal"
+            tools:layout_editor_absoluteX="64dp"
+            tools:layout_editor_absoluteY="48dp" />
+
+        <EditText android:id="@+id/weight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:drawableLeft="@drawable/mscale"
+            android:ems="10"
+            android:hint="Weight in kg"
+            android:inputType="number"
             tools:layout_editor_absoluteX="64dp"
             tools:layout_editor_absoluteY="48dp" />
 

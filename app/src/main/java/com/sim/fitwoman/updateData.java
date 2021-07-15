@@ -19,6 +19,9 @@ import com.sim.fitwoman.R;
 import com.sim.fitwoman.service.MySingleton;
 import com.sim.fitwoman.utils.WSadressIP;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -26,9 +29,10 @@ import java.util.Locale;
 import java.util.Map;
 
 public class updateData extends AppCompatActivity {
-    EditText txtAge, txtHeight;
+    EditText txtAge, txtHeight, txtWeight;
     Button btnAdd, btnCancel;
     String SPname, SPemail, SPweight ,SPheight, SPBMI, SPAge;
+    private String UPDATE_PROFILE_API_URL = "http://10.0.2.2:8012/fitness/api/update-profile.php";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,71 +41,72 @@ public class updateData extends AppCompatActivity {
         //1:set items
         txtAge = findViewById(R.id.editText313);
         txtHeight = findViewById(R.id.editText3456);
+        txtWeight = findViewById(R.id.weight);
         btnCancel = findViewById(R.id.button5cancelagain);
         btnAdd = findViewById(R.id.button4confirm);
 
         //2: get shared preferences data
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        SPname = preferences.getString("name", "");
-        SPemail = preferences.getString("email", "");
-        SPweight = preferences.getString("weight", "");
-        SPheight = preferences.getString("height", "");
-        SPBMI = preferences.getString("bmi", "");
-        SPAge = preferences.getString("age", "");
+        txtAge.setText(preferences.getString("Age", ""));
+        txtHeight.setText(preferences.getString("Height", ""));
+        txtWeight.setText(preferences.getString("Weight", ""));
 
         //3: set cancel btn
         btnCancel.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        finish();
-                    }
+            new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
                 }
+            }
         );
 
         //4: confirm btn
         btnAdd.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if(!txtAge.getText().toString().equals("") && !txtHeight.getText().toString().equals("") ){
-                         updateData(txtAge.getText().toString(),txtHeight.getText().toString());
-                        }else if(txtAge.getText().toString().equals("") && !txtHeight.getText().toString().equals("") ){
-                            updateData(SPAge,txtHeight.getText().toString());
-                        } else if(!txtAge.getText().toString().equals("") && txtHeight.getText().toString().equals("") ){
-                            updateData(txtAge.getText().toString(),SPheight);
-                        }else{
-                            Toast.makeText(getApplicationContext(),"Enter your height and/or age",Toast.LENGTH_SHORT).show();
-                        }
+            new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(!txtAge.getText().toString().equals("") && !txtHeight.getText().toString().equals("") && !txtWeight.getText().toString().equals("") ){
+                     updateData();
+                    }
+                    else{
+                        Toast.makeText(getApplicationContext(),"Enter your height and/or age and/or weight",Toast.LENGTH_SHORT).show();
                     }
                 }
+            }
         );
     }
 
-    public void updateData(final String UserNewAge , final String UserNewHeigth){
+    public void updateData(){
         final String   URL = "http://"+ WSadressIP.WSIP+"/FitWomanServices/MUpdateAgeHeight.php";
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, UPDATE_PROFILE_API_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                if(response.contains("success")) {
+                try {
+                    JSONObject json = new JSONObject(response);
 
-                    //update weight and bmi
-                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                    SPheight = preferences.getString("height", "");
-                    SharedPreferences.Editor prefsEditr = preferences.edit();
-                    prefsEditr.putString("height",UserNewHeigth);
-                    prefsEditr.putString("age",UserNewAge);
-                    String StringBMI = getBMI(SPweight,UserNewHeigth);
+                    if(json.getString("errorfound").equals("0")) {
+                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                        SPheight = preferences.getString("height", "");
+                        SharedPreferences.Editor prefsEditr = preferences.edit();
+                        prefsEditr.putString("Height", json.getString("Height"));
+                        prefsEditr.putString("Weight", json.getString("Weight"));
+                        prefsEditr.putString("Age", json.getString("Age"));
+                        prefsEditr.putString("BMI", json.getString("BMI"));
+                        prefsEditr.apply();
 
-                    prefsEditr.putString("bmi",StringBMI);
-                    prefsEditr.apply();
+                        Intent i = new Intent(updateData.this, Home.class);
+                        i.putExtra("openprofil", "open");
 
-
-                    //go back to profil
-                    Intent i = new Intent(updateData.this, Home.class);
-                    i.putExtra("openprofil", "open");
-
-                    startActivity(i);
+                        startActivity(i);
+                    }
+                    else
+                    {
+                        Toast.makeText(getApplicationContext(), json.getString("message"), Toast.LENGTH_LONG).show();
+                    }
+                }
+                catch (JSONException ex)
+                {
 
                 }
             }
@@ -114,15 +119,13 @@ public class updateData extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
                 params.put("Content-Type","application/x-www-form-urlencoded");
+                params.put("Age", txtAge.getText().toString());
+                params.put("Weight",txtWeight.getText().toString());
+                params.put("Height",txtHeight.getText().toString());
 
-
-
-                params.put("emailUser", SPemail);
-                params.put("weight",  SPweight);
-                params.put("age",  UserNewAge);
-                params.put("height",  UserNewHeigth);
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                params.put("UserId",preferences.getString("UserId", ""));
                 return params;
             }
         };

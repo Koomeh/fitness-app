@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -95,25 +96,25 @@ public class ProfilFragment extends Fragment {
         if(dBMI >= 30)
         {
             showStatus.setText("Obese");
-            showStatus.setTextColor(255);
+            //showStatus.setTextColor(255);
             showStatus.setTypeface(null, Typeface.BOLD);
         }
         else if(dBMI >= 25)
         {
             showStatus.setText("Overweight");
-            showStatus.setTextColor(255);
+            showStatus.setTextColor(Color.parseColor("#ff0000"));
             showStatus.setTypeface(null, Typeface.BOLD);
         }
         else if(dBMI >= 18.5)
         {
             showStatus.setText("Normal Weight");
-            showStatus.setTextColor(16777215);
+            showStatus.setTextColor(Color.parseColor("#00FF00"));
             showStatus.setTypeface(null, Typeface.BOLD);
         }
         else
         {
             showStatus.setText("Underweight");
-            showStatus.setTextColor(255);
+            showStatus.setTextColor(Color.parseColor("#ff0000"));
             showStatus.setTypeface(null, Typeface.BOLD);
         }
         //set the weight satus
@@ -121,17 +122,13 @@ public class ProfilFragment extends Fragment {
         //2: add weight for this day
         btngo =  v.findViewById(R.id.button2);
         btngo.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+            new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-                        dontExist();
-
-
-
-
-                    }
+                    dontExist();
                 }
+            }
         );
 
 
@@ -159,19 +156,15 @@ public class ProfilFragment extends Fragment {
         //4: See Activities Historic
         btnActivitiesHistoric = v.findViewById(R.id.textView9);
         btnActivitiesHistoric .setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+            new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-                        Intent i = new Intent(getContext(), Activities_Historic.class);
+                    Intent i = new Intent(getContext(), Activities_Historic.class);
 
-                        startActivity(i);
-
-
-
-
-                    }
+                    startActivity(i);
                 }
+            }
         );
 
         //4: See Meals Historic
@@ -195,19 +188,15 @@ public class ProfilFragment extends Fragment {
         //6: Update DAta
         btnUpdateData = v.findViewById(R.id.button5UpdateData);
         btnUpdateData.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+            new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-                        Intent i = new Intent(getContext(), updateData.class);
+                    Intent i = new Intent(getContext(), updateData.class);
 
-                        startActivity(i);
-
-
-
-
-                    }
+                    startActivity(i);
                 }
+            }
         );
 
         //7: show facebook profil picture
