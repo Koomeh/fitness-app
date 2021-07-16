@@ -43,7 +43,9 @@ public class FitnessFragment extends Fragment {
     ListView lv;
     List<MFitness> lstcc;
     private static final String URL_Activities = "http://"+ WSadressIP.WSIP+"/FitWomanServices/MgetWorkoutByBMI.php";
-    private String WORK_OUTS_API_URL = "http://192.168.198.222/fitness/api/get-workouts.php";
+    //private String WORK_OUTS_API_URL = "http://192.168.198.222/fitness/api/get-workouts.php";
+    private String WORK_OUTS_API_URL = "http://10.0.2.2:8012/fitness/api/get-workouts.php";
+    private String IMAGES_DIR_URL = "http://10.0.2.2:8012/fitness/images/workouts/";
     String SharedPrefBMI ;
     TextView title;
 
@@ -112,53 +114,53 @@ public class FitnessFragment extends Fragment {
     }
     private void loadActivities() {
 
-
         JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, WORK_OUTS_API_URL,null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            //converting the string to json array object
-                            JSONArray array = response.getJSONArray("workouts");
-                            //traversing through all the object
-                            for (int i = 0; i < array.length(); i++) {
+            new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        //converting the string to json array object
+                        JSONArray array = response.getJSONArray("workouts");
+                        //traversing through all the object
+                        for (int i = 0; i < array.length(); i++) {
 
-                                //getting product object from json array
-                                JSONObject product = array.getJSONObject(i);
+                            //getting product object from json array
+                            JSONObject workout = array.getJSONObject(i);
 
-                                //adding the product to product list
-                                lstcc.add(new MFitness(
+                            //adding the product to product list
+                            lstcc.add(new MFitness(
+                                    workout.getInt("ExerciseId"),
+                                    workout.getString("ExerciseName"),
+                                    workout.getString("Description").substring(0, 80),
+                                    IMAGES_DIR_URL + workout.getString("Image"),
+                                  "",
+                                  ""
+                                  // product.getString("Steps"),
+                                    //workout.getString("Video"),
+                                    //workout.getString("mistakes")
 
-                                        product.getString("Name"),
-
-                                        product.getString("Description"),
-                                        product.getString("Image"),
-                                      // product.getString("Steps"),
-                                        product.getString("Video"),
-                                        product.getString("mistakes")
-
-                                ));
-                            }
-
-                            //creating adapter object and setting it to recyclerview
-                            FitnessAdapter adapter = new FitnessAdapter(getContext() ,R.layout.fitness_row,lstcc );
-                            adapter.notifyDataSetChanged();
-                            lv.setAdapter(adapter);
-
-
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                            ));
                         }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
+                        //creating adapter object and setting it to recyclerview
+                        FitnessAdapter adapter = new FitnessAdapter(getContext() ,R.layout.fitness_row,lstcc );
+                        adapter.notifyDataSetChanged();
+                        lv.setAdapter(adapter);
 
+
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                }){
+                }
+            },
+            new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            })
+        {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();

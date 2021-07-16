@@ -20,7 +20,8 @@ public class MFitness {
         Image = image;
     }
 
-    public MFitness(String name, String description, String image, String video ,String mistakes) {
+    public MFitness(int id, String name, String description, String image, String video ,String mistakes) {
+        id = id;
         Name = name;
         Description = description;
 

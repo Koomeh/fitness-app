@@ -86,19 +86,10 @@ loadMeals();
                // Toast.makeText(getContext(),String.valueOf(idS),Toast.LENGTH_SHORT).show();
             }
         });
-/////////////////////////
 
         lv.setEmptyView(nomeals);
-
-
-
-
         return v;
-
-
     }
-
-
 
     protected FragmentActivity getActivityNonNull() {
         if (super.getActivity() != null) {
@@ -107,7 +98,6 @@ loadMeals();
             throw new RuntimeException("null returned from getMeal()");
         }
     }
-
 
     private void loadMeals() {
 

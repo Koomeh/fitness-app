@@ -43,7 +43,7 @@ public class FitnessAdapter extends ArrayAdapter<MFitness> {
 
         txt_description.setText(getItem(position).getDescription() );
       //  img_img.setImageResource(R.drawable.m15);
-        String theImage_URL = "http://"+ WSadressIP.WSIP+"/"+getItem(position).getImage();
+        String theImage_URL = getItem(position).getImage();
 
 
         ImageLoader imageLoader = MySingleton.getInstance(getContext()).getImageLoader();
@@ -57,10 +57,7 @@ public class FitnessAdapter extends ArrayAdapter<MFitness> {
             @Override
             public void onResponse(ImageLoader.ImageContainer response, boolean arg1) {
                 if (response.getBitmap() != null) {
-
-
                     img_img.setImageBitmap(response.getBitmap());
-
                 }
             }
         });
