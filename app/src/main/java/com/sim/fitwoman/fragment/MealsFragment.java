@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.sim.fitwoman.MealDetailsActivity;
@@ -46,8 +47,9 @@ public class MealsFragment extends Fragment {
     Button addmeal;
     ListView lv;
     List<Meal> lstcc;
-    private static  String URL_Meals = "http://"+ WSadressIP.WSIP+"/FitWomanServices/Meal/getMealByUserDay.php";
-   // public int usrId = 4 ;
+    //private static  String URL_Meals = "http://"+ WSadressIP.WSIP+"/FitWomanServices/Meal/getMealByUserDay.php";
+    private static  String URL_MEALS = "http://10.0.2.2:8012/fitness/api/get-meals.php";
+    private String MEALSS_DIR_URL = "http://10.0.2.2:8012/fitness/images/meals/";
    String SPname, SPemail, SPweight;
 Button delete;
 TextView nomeals;
@@ -58,16 +60,11 @@ TextView nomeals;
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_meals, container, false);
 
-
-
-
-
         lv =  v.findViewById(R.id.simpleListView);
         lstcc = new ArrayList<>();
-        Log.d("URL" , URL_Meals);
-nomeals = v.findViewById(R.id.nomeals);
-loadMeals();
-////////////////////
+
+        nomeals = v.findViewById(R.id.nomeals);
+        loadMeals();
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,long arg3) {
@@ -101,39 +98,34 @@ loadMeals();
 
     private void loadMeals() {
 
-
        // StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_Meals+"?id=4",
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_Meals,
-                new Response.Listener<String>() {
+        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, URL_MEALS, null,
+                new Response.Listener<JSONObject>() {
                     @Override
-                    public void onResponse(String response) {
+                    public void onResponse(JSONObject response) {
                         try {
-
-                            Log.d("ResponseMeal" , response);
                             //converting the string to json array object
-                            JSONArray array = new JSONArray(response);
+                            JSONArray array = response.getJSONArray("meals");
 
                             //traversing through all the object
                             for (int i = 0; i < array.length(); i++) {
 
                                 //getting product object from json array
-                                JSONObject product = array.getJSONObject(i);
+                                JSONObject meal = array.getJSONObject(i);
 
                                 //adding the product to product list
                                 lstcc.add(new Meal(
-                                        product.getInt("id"),
-                                        product.getString("day"),
-                                        product.getString("type"),
-                                        product.getInt("totalCalories") ,
-                                        product.getInt("idUser")
+                                        meal.getInt("id"),
+                                        meal.getString("day"),
+                                        meal.getString("type"),
+                                        meal.getInt("totalCalories") ,
+                                        meal.getInt("idUser")
 
 
                                 ));
 
                               // Log.d("DATA ITEM MEALS : " ,String.valueOf( lstcc.get(0).getId())) ;
                             }
-
-                            Log.d("ResponseMealArray" , ""+lstcc.size());
 
                             //creating adapter object and setting it to recyclerview
                             MealAdapter adapter = new MealAdapter(getContext() ,R.layout.meals_list,lstcc );
