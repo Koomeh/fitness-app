@@ -2,6 +2,8 @@ package com.sim.fitwoman.fragment;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -59,21 +61,36 @@ public class FitnessFragment extends Fragment {
 
         //1: get shared pref data
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext() );
-        String name = preferences.getString("name", "");
-        SharedPrefBMI  = preferences.getString("bmi", "");
+        //String name = preferences.getString("name", "");
+        SharedPrefBMI  = preferences.getString("BMI", "");
+        double dBMI = 0;
 
-        //2: set title (workout category)
+        try {
+            dBMI = Double.parseDouble(SharedPrefBMI);
+        }
+        catch (NumberFormatException ex)
+        {
+            dBMI = 0;
+        }
+
         title = (TextView) v.findViewById(R.id.textView38);
-        if(SharedPrefBMI.equals("1")){
-            title.setText("To Gain Weight");
-        }
-        else  if(SharedPrefBMI.equals("2")){
-            title.setText("To Maintain Weight");
-        }else  if(SharedPrefBMI.equals("3")){
+
+        if(dBMI >= 25)
+        {
             title.setText("To Loose Weight");
+            title.setTextColor(Color.parseColor("#ff0000"));
+        }
+        else if(dBMI >= 18.5)
+        {
+            title.setText("To Maintain Weight");
+            title.setTextColor(Color.parseColor("#00FF00"));
+        }
+        else
+        {
+            title.setText("To Gain Weight");
+            title.setTextColor(Color.parseColor("#ff0000"));
         }
 
-        //3: set list view
         lv =  v.findViewById(R.id.fitness_listview);
 
         lstcc = new ArrayList<>();
