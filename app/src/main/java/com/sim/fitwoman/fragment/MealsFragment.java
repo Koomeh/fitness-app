@@ -104,7 +104,9 @@ TextView nomeals;
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            //converting the string to json array object
+                            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext() );
+                            //String name = preferences.getString("name", "");
+                            String userId  = preferences.getString("UserId", "");
                             JSONArray array = response.getJSONArray("meals");
 
                             //traversing through all the object
@@ -116,12 +118,10 @@ TextView nomeals;
                                 //adding the product to product list
                                 lstcc.add(new Meal(
                                         meal.getInt("MealId"),
-                                        meal.getString("day"),
+                                        meal.getString("CreatedDate"),
                                         meal.getString("MealType"),
-                                        meal.getInt("totalCalories") ,
-                                        meal.getInt("idUser")
-
-
+                                        100 ,
+                                        Integer.parseInt(userId)
                                 ));
 
                               // Log.d("DATA ITEM MEALS : " ,String.valueOf( lstcc.get(0).getId())) ;

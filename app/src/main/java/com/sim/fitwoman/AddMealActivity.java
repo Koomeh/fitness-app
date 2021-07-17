@@ -77,8 +77,6 @@ public class AddMealActivity extends AppCompatActivity {
 
                         startActivity(intent);
 
-
-
                     }
                 }
         );
@@ -95,11 +93,6 @@ public class AddMealActivity extends AppCompatActivity {
                     public void onClick(View v) {
 
                         AddMeal();
-
-
-
-
-
                     }
                 }
         );
@@ -110,10 +103,6 @@ public class AddMealActivity extends AppCompatActivity {
     public void AddMeal(){
 
         final String   URL = "http://"+ WSadressIP.WSIP+"/FitWomanServices/Meal/addMeal.php";
-
-
-
-
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
             @Override
@@ -159,11 +148,5 @@ public class AddMealActivity extends AppCompatActivity {
         };
 
         MySingleton.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
-
-
     }
-
-
-
-
 }
