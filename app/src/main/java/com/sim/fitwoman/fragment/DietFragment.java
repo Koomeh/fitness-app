@@ -20,6 +20,7 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.sim.fitwoman.R;
@@ -43,6 +44,8 @@ public class DietFragment extends Fragment {
     ListView lv;
     List<diet> lstcc;
     private static final String URL_Activities = "http://"+ WSadressIP.WSIP+"/FitWomanServices/Meal/MgetDietByBMI.php";
+    private static  String URL_MEALS = "http://10.0.2.2:8012/fitness/api/get-meals.php";
+    private String MEALSS_DIR_URL = "http://10.0.2.2:8012/fitness/images/meals/";
     String SharedPrefBMI;
 
 
@@ -99,14 +102,13 @@ public class DietFragment extends Fragment {
     private void loadActivities() {
 
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_Activities,
-                new Response.Listener<String>() {
+        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, URL_MEALS, null,
+                new Response.Listener<JSONObject>() {
                     @Override
-                    public void onResponse(String response) {
+                    public void onResponse(JSONObject response) {
                         try {
-                            Log.d("ResponseMeal" , response);
                             //converting the string to json array object
-                            JSONArray array = new JSONArray(response);
+                            JSONArray array = response.getJSONArray("meals");
 
                             //traversing through all the object
                             for (int i = 0; i < array.length(); i++) {
@@ -117,11 +119,11 @@ public class DietFragment extends Fragment {
                                 //adding the product to product list
                                 lstcc.add(new diet(
 
-                                        product.getString("Day"),
-                                        product.getString("Type"),
-                                        product.getString("image"),
-                                        product.getString("description"),
-                                       product.getString("calories")
+                                        product.getString("MealName"),
+                                        product.getString("MealType"),
+                                        MEALSS_DIR_URL + product.getString("Image"),
+                                        product.getString("Ingredients"),
+                                       product.getString("CreatedDate")
 
                                 ));
                             }

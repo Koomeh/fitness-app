@@ -48,8 +48,7 @@ public class DietAdapter  extends ArrayAdapter<diet> {
         txt_cal.setText(getItem(position).getCalories());
 
         //  img_img.setImageResource(R.drawable.m15);
-        String theImage_URL = "http://"+ WSadressIP.WSIP+"/"+getItem(position).getImage();
-
+        String theImage_URL = getItem(position).getImage();
 
         ImageLoader imageLoader = MySingleton.getInstance(getContext()).getImageLoader();
 
