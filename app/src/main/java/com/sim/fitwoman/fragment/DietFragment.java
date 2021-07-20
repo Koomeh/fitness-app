@@ -44,7 +44,8 @@ public class DietFragment extends Fragment {
     ListView lv;
     List<diet> lstcc;
     private static final String URL_Activities = "http://"+ WSadressIP.WSIP+"/FitWomanServices/Meal/MgetDietByBMI.php";
-    private static  String URL_MEALS = "http://10.0.2.2:8012/fitness/api/get-meals.php";
+    //private static  String URL_MEALS = "http://10.0.2.2:8012/fitness/api/get-meals.php";
+    private static  String API_URL_GET_DIETS = "http://10.0.2.2:8012/fitness/api/get-diets.php";
     private String MEALSS_DIR_URL = "http://10.0.2.2:8012/fitness/images/meals/";
     String SharedPrefBMI;
 
@@ -102,13 +103,13 @@ public class DietFragment extends Fragment {
     private void loadActivities() {
 
 
-        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, URL_MEALS, null,
+        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, API_URL_GET_DIETS, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
                             //converting the string to json array object
-                            JSONArray array = response.getJSONArray("meals");
+                            JSONArray array = response.getJSONArray("diets");
 
                             //traversing through all the object
                             for (int i = 0; i < array.length(); i++) {
@@ -118,13 +119,11 @@ public class DietFragment extends Fragment {
 
                                 //adding the product to product list
                                 lstcc.add(new diet(
-
-                                        product.getString("MealName"),
-                                        product.getString("MealType"),
+                                        product.getString("Day"),
+                                        product.getString("Type"),
                                         MEALSS_DIR_URL + product.getString("Image"),
-                                        product.getString("Ingredients"),
-                                       product.getString("CreatedDate")
-
+                                        product.getString("Description"),
+                                        product.getString("Calories")
                                 ));
                             }
                           //  Log.d("ResponseDietArray" , ""+lstcc.size());
