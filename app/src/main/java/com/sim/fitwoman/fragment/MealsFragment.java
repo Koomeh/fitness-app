@@ -116,11 +116,21 @@ TextView nomeals;
                                 JSONObject meal = array.getJSONObject(i);
 
                                 //adding the product to product list
+                                String calories = meal.getString("Calories");
+                                int nCalories = 0;
+                                try
+                                {
+                                    nCalories = Integer.parseInt(calories);
+                                }
+                                catch (Exception e)
+                                {
+                                    nCalories = 0;
+                                }
                                 lstcc.add(new Meal(
                                         meal.getInt("MealId"),
                                         meal.getString("Day"),
                                         meal.getString("Type"),
-                                        meal.getInt("Calories"),
+                                        nCalories,
                                         Integer.parseInt(userId)
                                 ));
 

@@ -31,9 +31,10 @@ public class addToMealActivity extends AppCompatActivity {
     Button addtomeal ;
     EditText getquantity ;
     int id = 0 ;
-    String SPname , SPemail , SPweight;
+    String SPname , SPemail , SPweight, mealType;
 
     private static final String URL_Activities = "http://"+ WSadressIP.WSIP+"/FitWomanServices/Meal/addIngredientTomeal.php";
+    private static String UPDATE_MEALS_API_URL = "http://10.0.2.2:8012/fitness/api/update-meal.php";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +56,7 @@ public class addToMealActivity extends AppCompatActivity {
         SPname = preferences.getString("Name", "");
         SPemail = preferences.getString("Email", "");
         SPweight = preferences.getString("Weight", "");
+        mealType = preferences.getString("mealType", "");
 
 
         //l'affichage mtee el choix selectionné
@@ -77,7 +79,7 @@ public class addToMealActivity extends AppCompatActivity {
             public void onClick(View v) {
 
               //  Toast.makeText(addToMealActivity.this, "id : "+id, Toast.LENGTH_LONG).show();
-                StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_Activities,
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, UPDATE_MEALS_API_URL,
                         new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
@@ -118,6 +120,7 @@ public class addToMealActivity extends AppCompatActivity {
                         params.put("Quantity", getquantity.getText().toString() );
                         params.put("IngredientId", String.valueOf(id));
                         params.put("UserEmail", SPemail);
+                        params.put("MealType", mealType);
                         return params;
                     }
                 };

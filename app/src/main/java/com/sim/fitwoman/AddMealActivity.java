@@ -16,11 +16,15 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 
 import com.sim.fitwoman.R;
 import com.sim.fitwoman.service.MySingleton;
 import com.sim.fitwoman.utils.WSadressIP;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -96,14 +100,26 @@ public class AddMealActivity extends AppCompatActivity {
     }
 
     public void AddMeal(){
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, ADD_MEALS_API_URL, new Response.Listener<String>() {
+        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, ADD_MEALS_API_URL, null,new Response.Listener<JSONObject>() {
             @Override
-            public void onResponse(String response) {
-                if(response.contains("success")) {
-                    Toast.makeText(getApplicationContext(),"success",Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(AddMealActivity.this,SelectIngredient.class);
-                    startActivity(intent);
-                    finish();
+            public void onResponse(JSONObject response) {
+                try {
+                    if (response.getString("message").equals("success")) {
+                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putString("mealType",response.getString("mealType"));
+                        editor.apply();
+
+                        Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(AddMealActivity.this, SelectIngredient.class);
+                        intent.putExtra("mealType", response.getString("mealType"));
+                        startActivity(intent);
+                        finish();
+                    }
+                }
+                catch (JSONException e)
+                {
+
                 }
             }
         }, new Response.ErrorListener() {
