@@ -34,7 +34,8 @@ public class AddMealActivity extends AppCompatActivity {
     Button btnAddActivity,skip;
     RadioButton Breakfast , Lunch , Dinner , Other ;
    // Integer idUser = 4;
-    String SPname , SPemail , SPweight;
+    String SPname , SPemail , SPweight, userId;
+    private static  String ADD_MEALS_API_URL = "http://10.0.2.2:8012/fitness/api/add-meal.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +45,10 @@ public class AddMealActivity extends AppCompatActivity {
 
         //get user data from shared preferences
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(AddMealActivity.this);
-        SPname = preferences.getString("name", "");
-        SPemail = preferences.getString("email", "");
+        SPname = preferences.getString("Name", "");
+        SPemail = preferences.getString("Email", "");
+        userId = preferences.getString("UserId", "");
         SPweight = preferences.getString("weight", "");
-
 
         // Toolbar toolbar = findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
@@ -80,11 +81,7 @@ public class AddMealActivity extends AppCompatActivity {
                     }
                 }
         );
-
-
     }
-
-
 
     public void BtnToAddActivity(){
         btnAddActivity.setOnClickListener(
@@ -98,13 +95,8 @@ public class AddMealActivity extends AppCompatActivity {
         );
     }
 
-
-
     public void AddMeal(){
-
-        final String   URL = "http://"+ WSadressIP.WSIP+"/FitWomanServices/Meal/addMeal.php";
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, ADD_MEALS_API_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 if(response.contains("success")) {
@@ -127,21 +119,21 @@ public class AddMealActivity extends AppCompatActivity {
                 params.put("Content-Type","application/x-www-form-urlencoded");
 
                 if(Breakfast.isChecked())
-                {params.put("type","Breakfast");}
+                {params.put("Type","Breakfast");}
 
                 else if(Lunch.isChecked())
-                { params.put("type","Lunch");}
+                { params.put("Type","Lunch");}
 
                 else if(Dinner.isChecked())
-                {  params.put("type","Dinner");}
+                {  params.put("Type","Dinner");}
 
                 else if(Other.isChecked())
-                {  params.put("type","Other");}
+                {  params.put("Type","Other");}
 
-
-                  params.put("day", date);
-                params.put("emailUser", SPemail);
-               // params.put("idUser", String.valueOf(idUser));
+                params.put("Day", date);
+                params.put("UserEmail", SPemail);
+                params.put("UserId", userId);
+                params.put("Calories", "100");
 
                 return params;
             }

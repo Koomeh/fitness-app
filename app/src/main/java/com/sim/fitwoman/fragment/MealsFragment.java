@@ -118,9 +118,9 @@ TextView nomeals;
                                 //adding the product to product list
                                 lstcc.add(new Meal(
                                         meal.getInt("MealId"),
-                                        meal.getString("CreatedDate"),
-                                        meal.getString("MealType"),
-                                        100 ,
+                                        meal.getString("Day"),
+                                        meal.getString("Type"),
+                                        meal.getInt("Calories"),
                                         Integer.parseInt(userId)
                                 ));
 

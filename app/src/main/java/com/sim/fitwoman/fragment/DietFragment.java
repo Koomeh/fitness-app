@@ -101,8 +101,6 @@ public class DietFragment extends Fragment {
         }
     }
     private void loadActivities() {
-
-
         JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, API_URL_GET_DIETS, null,
                 new Response.Listener<JSONObject>() {
                     @Override

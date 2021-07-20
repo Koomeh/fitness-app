@@ -52,9 +52,9 @@ public class addToMealActivity extends AppCompatActivity {
 
         //get user data from shared preferences
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(addToMealActivity.this);
-        SPname = preferences.getString("name", "");
-        SPemail = preferences.getString("email", "");
-        SPweight = preferences.getString("weight", "");
+        SPname = preferences.getString("Name", "");
+        SPemail = preferences.getString("Email", "");
+        SPweight = preferences.getString("Weight", "");
 
 
         //l'affichage mtee el choix selectionné
@@ -77,18 +77,16 @@ public class addToMealActivity extends AppCompatActivity {
             public void onClick(View v) {
 
               //  Toast.makeText(addToMealActivity.this, "id : "+id, Toast.LENGTH_LONG).show();
-
-
                 StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_Activities,
                         new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
-                                String sUsername = getquantity.getText().toString();
-                                if (sUsername.matches("")) {
+                                String quantity = getquantity.getText().toString();
+                                if (quantity.matches("")) {
                                     Toast.makeText(getApplicationContext(), "Please enter a quantity", Toast.LENGTH_SHORT).show();
                                     return;
                                 }
-                                else if(Integer.valueOf(sUsername) > 1000) {
+                                else if(Integer.valueOf(quantity) > 1000) {
                                     Toast.makeText(getApplicationContext(), "Please enter a quantity under 1000", Toast.LENGTH_SHORT).show();
                                     return;
                                 }
@@ -115,11 +113,11 @@ public class addToMealActivity extends AppCompatActivity {
                     protected Map<String, String> getParams() throws AuthFailureError {
                         Map<String, String> params = new HashMap<>();
                         params.put("Content-Type","application/x-www-form-urlencoded");
-                        params.put("name", tv_name.getText().toString());
-                        params.put("calories", tv_cal.getText().toString());
-                        params.put("quantity", getquantity.getText().toString() );
-                        params.put("idIngredient", String.valueOf(id));
-                        params.put("emailUser", SPemail);
+                        params.put("Name", tv_name.getText().toString());
+                        params.put("Calories", tv_cal.getText().toString());
+                        params.put("Quantity", getquantity.getText().toString() );
+                        params.put("IngredientId", String.valueOf(id));
+                        params.put("UserEmail", SPemail);
                         return params;
                     }
                 };

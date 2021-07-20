@@ -117,11 +117,6 @@ int idMeal=0;
         );
 
         loadActivities();
-
-
-
-
-
     }
 
     private void loadActivities() {
