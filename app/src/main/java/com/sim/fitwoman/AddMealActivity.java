@@ -100,19 +100,20 @@ public class AddMealActivity extends AppCompatActivity {
     }
 
     public void AddMeal(){
-        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, ADD_MEALS_API_URL, null,new Response.Listener<JSONObject>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, ADD_MEALS_API_URL,new Response.Listener<String>() {
             @Override
-            public void onResponse(JSONObject response) {
+            public void onResponse(String response) {
                 try {
-                    if (response.getString("message").equals("success")) {
+                    JSONObject json = new JSONObject(response);
+                    if (json.getString("message").equals("success")) {
                         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                         SharedPreferences.Editor editor = preferences.edit();
-                        editor.putString("mealType",response.getString("mealType"));
+                        editor.putString("mealType",json.getString("mealType"));
                         editor.apply();
 
                         Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(AddMealActivity.this, SelectIngredient.class);
-                        intent.putExtra("mealType", response.getString("mealType"));
+                        intent.putExtra("mealType", json.getString("mealType"));
                         startActivity(intent);
                         finish();
                     }
@@ -131,7 +132,7 @@ public class AddMealActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-               String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+                String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
                 params.put("Content-Type","application/x-www-form-urlencoded");
 
                 if(Breakfast.isChecked())
