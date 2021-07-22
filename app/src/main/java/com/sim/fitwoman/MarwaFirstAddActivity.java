@@ -64,42 +64,6 @@ public class MarwaFirstAddActivity extends AppCompatActivity {
             }
         });
 
-
-        //get searched text
-      /*  searchingActivity = findViewById(R.id.editText);
-        searchingActivity.setOnKeyListener(
-                new View.OnKeyListener() {
-                    @Override
-                    public boolean onKey(View v, int keyCode, KeyEvent event) {
-                        listView = (ListView) findViewById(R.id.listSearch);
-                        lstcc = new ArrayList<>();
-                        loadActivities();
-
-                        //on item list click move to add activity
-                        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,long arg3) {
-                                MlistSearch data= (MlistSearch) arg0.getItemAtPosition(arg2);
-                                String nameS = data.getName();
-                                String iconS = data.getIcon();
-                                String metS = data.getMet();
-                                //  Toast.makeText(getContext(),stepsS,Toast.LENGTH_SHORT).show();
-
-
-
-                                Intent i = new Intent(MarwaFirstAddActivity.this, MarwaAdd.class);
-                                i.putExtra("nameS", nameS);
-                                i.putExtra("iconS", iconS);
-                                i.putExtra("metS",metS);
-
-                                startActivity(i);
-
-                            }
-                        });
-                        return true;
-                    }
-                }
-        );
-*/
         listView = (ListView) findViewById(R.id.listSearch);
         lstcc = new ArrayList<>();
 
@@ -109,7 +73,6 @@ public class MarwaFirstAddActivity extends AppCompatActivity {
                 new View.OnKeyListener() {
                     @Override
                     public boolean onKey(View v, int keyCode, KeyEvent event) {
-
 
                         //loadActivities();
                       searchByName();

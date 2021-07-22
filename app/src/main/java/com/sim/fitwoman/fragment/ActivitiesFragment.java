@@ -57,7 +57,7 @@ public class ActivitiesFragment extends Fragment {
     ListView lv;
     List<MActivity> lstcc;
     private static final String URL_Activities = "http://"+ WSadressIP.WSIP+"/FitWomanServices/MgetActivityByUserDay.php";
-    private static  String GET_ACTIVITIES_API_URL = "http://10.0.2.2:8012/fitness/api/get-activities.php";
+    private static  String GET_PERSONAL_ACTIVITIES_API_URL = "http://10.0.2.2:8012/fitness/api/get-personal-activities.php";
     private String ACTIVITIES_DIR_URL = "http://10.0.2.2:8012/fitness/images/activities/";
     TextView TodayDay;
     String SPname, SPemail, SPweight;
@@ -164,8 +164,13 @@ public class ActivitiesFragment extends Fragment {
 
     private void loadActivities() {
 
+        JSONObject postData = new JSONObject();
+        Map<String, String> params = new HashMap<>();
+        params.put("UserEmail", SPemail);
 
-        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, GET_ACTIVITIES_API_URL, null,
+        postData = new JSONObject(params);
+
+        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, GET_PERSONAL_ACTIVITIES_API_URL, postData,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -180,7 +185,7 @@ public class ActivitiesFragment extends Fragment {
                                 JSONObject product = array.getJSONObject(i);
                                 //adding the product to product list
                                 lstcc.add(new MActivity(
-                                        product.getInt("ActivityId"),
+                                        product.getInt("PersonalActivityId"),
                                         product.getString("Name"),
                                         product.getString("Duration"),
                                         product.getInt("BurnedCalories"),
@@ -212,15 +217,15 @@ public class ActivitiesFragment extends Fragment {
 
                     }
                 }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("Content-Type", "application/x-www-form-urlencoded");
-                String datee = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-                params.put("emailUser", SPemail);
-                params.put("day", datee);
-                return params;
-            }
+//            @Override
+//            protected Map<String, String> getParams() throws AuthFailureError {
+//                Map<String, String> params = new HashMap<>();
+//                params.put("Content-Type", "application/x-www-form-urlencoded");
+//                String datee = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+//                params.put("UserEmail", SPemail);
+//                params.put("day", datee);
+//                return params;
+//            }
         };
 
         //adding our stringrequest to queue
@@ -233,9 +238,9 @@ public class ActivitiesFragment extends Fragment {
 
         // get data from Shared preferences
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        SPname = preferences.getString("name", "");
-        SPemail = preferences.getString("email", "");
-        SPweight = preferences.getString("weight", "");
+        SPname = preferences.getString("Name", "");
+        SPemail = preferences.getString("Email", "");
+        SPweight = preferences.getString("Weight", "");
         if (getArguments() != null) {
 
         }

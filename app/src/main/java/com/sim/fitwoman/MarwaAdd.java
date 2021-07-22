@@ -39,6 +39,8 @@ public class MarwaAdd extends AppCompatActivity {
     String SPname , SPemail , SPweight;
     String ActiMet , ActiIcon;
     ImageView theIcon;
+
+    private static  String ADD_PERSONAL_ACTIVITY_API_URL = "http://10.0.2.2:8012/fitness/api/add-personal-activity.php";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,10 +129,7 @@ public class MarwaAdd extends AppCompatActivity {
     }
 
 public void WSAddActivity(){
-
-    final String   URL = "http://"+ WSadressIP.WSIP+"/FitWomanServices/MaddActivity.php";
-
-    StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+    StringRequest stringRequest = new StringRequest(Request.Method.POST, ADD_PERSONAL_ACTIVITY_API_URL, new Response.Listener<String>() {
         @Override
         public void onResponse(String response) {
             if(response.contains("success")) {
@@ -150,14 +149,14 @@ public void WSAddActivity(){
             Map<String, String> params = new HashMap<>();
             String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
             params.put("Content-Type","application/x-www-form-urlencoded");
-            params.put("name", Aname.getText().toString());
-            params.put("day", date);
-            params.put("duration", Aduration.getText().toString());
+            params.put("Name", Aname.getText().toString());
+            params.put("Day", date);
+            params.put("Duration", Aduration.getText().toString());
            // params.put("description", Adesc.getText().toString());
-            params.put("emailUser", SPemail);
-            params.put("weight",  SPweight);
-            params.put("met",  ActiMet);
-            params.put("icon",  ActiIcon);
+            params.put("UserEmail", SPemail);
+            params.put("Weight",  SPweight);
+            params.put("Met",  ActiMet);
+            params.put("Image",  ActiIcon);
             return params;
         }
     };
