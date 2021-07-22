@@ -65,9 +65,9 @@ public class MarwaAdd extends AppCompatActivity {
 
        //3: get user data from shared preferences
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MarwaAdd.this);
-        SPname = preferences.getString("name", "");
-        SPemail = preferences.getString("email", "");
-        SPweight = preferences.getString("weight", "");
+        SPname = preferences.getString("Name", "");
+        SPemail = preferences.getString("Email", "");
+        SPweight = preferences.getString("Weight", "");
 
 
         //4: get interface items here
@@ -82,7 +82,7 @@ public class MarwaAdd extends AppCompatActivity {
 
 
         //6: show img from DB
-        String theImage_URL = "http://"+ WSadressIP.WSIP+"/"+ActiIcon;
+        String theImage_URL = ActiIcon;
 
 
         ImageLoader imageLoader = MySingleton.getInstance(getApplicationContext()).getImageLoader();
@@ -107,12 +107,9 @@ public class MarwaAdd extends AppCompatActivity {
 
         //7: btn add activity
        BtnToAddActivity();
-
-
-
-
     }
-   public void BtnToAddActivity(){
+
+    public void BtnToAddActivity(){
         btnAddActivity.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -124,9 +121,6 @@ public class MarwaAdd extends AppCompatActivity {
                         }else{
                             Toast.makeText(getApplicationContext(),"Enter Activity Duration",Toast.LENGTH_SHORT).show();
                         }
-
-
-
                     }
                 }
         );
@@ -135,10 +129,6 @@ public class MarwaAdd extends AppCompatActivity {
 public void WSAddActivity(){
 
     final String   URL = "http://"+ WSadressIP.WSIP+"/FitWomanServices/MaddActivity.php";
-
-
-
-
 
     StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
         @Override
@@ -173,7 +163,5 @@ public void WSAddActivity(){
     };
 
     MySingleton.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
-
-
 }
 }

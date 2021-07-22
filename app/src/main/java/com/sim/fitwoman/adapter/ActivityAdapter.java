@@ -45,8 +45,7 @@ public class ActivityAdapter extends ArrayAdapter<MActivity> {
         txt_duration.setText("Duration: " + getItem(position).getDuration()+ " Minutes");
         txt_burned.setText("Burned Calories: " + getItem(position).getBurnedCalories()+" KCAL");
         txt_description.setText( getItem(position).getDescription());
-        String theImage_URL = "http://"+ WSadressIP.WSIP+"/"+getItem(position).getIcon();
-
+        String theImage_URL = getItem(position).getIcon();
 
         ImageLoader imageLoader = MySingleton.getInstance(getContext()).getImageLoader();
 

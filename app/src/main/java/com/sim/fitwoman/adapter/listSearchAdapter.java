@@ -43,7 +43,7 @@ public class listSearchAdapter extends ArrayAdapter<MlistSearch> {
 
 
       final  ImageView imgIcon = (ImageView) convertView.findViewById(R.id.imageView11);
-        String theImage_URL = "http://"+ WSadressIP.WSIP+"/"+user.getIcon();
+        String theImage_URL = user.getIcon();
 
 
         ImageLoader imageLoader = MySingleton.getInstance(getContext()).getImageLoader();

@@ -15,6 +15,7 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.sim.fitwoman.R;
@@ -40,9 +41,9 @@ public class MarwaFirstAddActivity extends AppCompatActivity {
     List<MlistSearch> lstcc;
     List<MlistSearch> lstcs;
     EditText searchingActivity;
-  private static final String URL_Activities = "http://"+ WSadressIP.WSIP+"/FitWomanServices/MgetAllMET.php";
-
-
+    private static final String URL_Activities = "http://"+ WSadressIP.WSIP+"/FitWomanServices/MgetAllMET.php";
+    private static  String GET_ACTIVITIES_API_URL = "http://10.0.2.2:8012/fitness/api/get-activities.php";
+    private String ACTIVITIES_DIR_URL = "http://10.0.2.2:8012/fitness/images/activities/";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,8 +99,6 @@ public class MarwaFirstAddActivity extends AppCompatActivity {
                     }
                 }
         );
-
-
 */
         listView = (ListView) findViewById(R.id.listSearch);
         lstcc = new ArrayList<>();
@@ -124,20 +123,17 @@ public class MarwaFirstAddActivity extends AppCompatActivity {
 
         loadActivities();
 
-
-
     }
 
     private void loadActivities() {
-
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_Activities,
-                new Response.Listener<String>() {
+        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, GET_ACTIVITIES_API_URL, null,
+                new Response.Listener<JSONObject>() {
                     @Override
-                    public void onResponse(String response) {
+                    public void onResponse(JSONObject response) {
                         try {
                             //converting the string to json array object
-                            JSONArray array = new JSONArray(response);
+                            //JSONArray array = new JSONArray(response);
+                            JSONArray array = response.getJSONArray("activities");
 
                             //traversing through all the object
                             for (int i = 0; i < array.length(); i++) {
@@ -147,12 +143,10 @@ public class MarwaFirstAddActivity extends AppCompatActivity {
 
                                 //adding the product to product list
                                 lstcc.add(new MlistSearch(
-
-                                        product.getString("name"),
-                                        product.getString("icon"),
-                                        product.getString("met_value")
-
-
+                                    product.getString("Name"),
+                                        ACTIVITIES_DIR_URL + product.getString("Image"),
+                                        "1"
+                                        //product.getString("met_value")
                                 ));
                             }
 
@@ -160,9 +154,6 @@ public class MarwaFirstAddActivity extends AppCompatActivity {
                             listSearchAdapter adapter = new listSearchAdapter(MarwaFirstAddActivity.this ,R.layout.listsearch_row,lstcc );
                             adapter.notifyDataSetChanged();
                             listView.setAdapter(adapter);
-
-
-
 
                         } catch (JSONException e) {
                             e.printStackTrace();
