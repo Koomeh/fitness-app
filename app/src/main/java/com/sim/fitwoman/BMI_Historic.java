@@ -78,7 +78,8 @@ public class BMI_Historic extends AppCompatActivity {
                         try {
                             //converting the string to json array object
                             JSONArray array = response.getJSONArray("histories");
-
+                            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                            String bmi = preferences.getString("BMI", "");
                             //traversing through all the object
                             for (int i = 0; i < array.length(); i++) {
 
@@ -89,7 +90,7 @@ public class BMI_Historic extends AppCompatActivity {
                                 lstccM.add(new MBMIHistoric(
                                     product.getString("CreatedDate"),
                                     product.getString("Weight"),
-                                    SBMI,
+                                    bmi,
                                     product.getString("BMI")
                                 ));
                             }

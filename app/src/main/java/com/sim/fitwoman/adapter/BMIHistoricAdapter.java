@@ -35,10 +35,10 @@ public class BMIHistoricAdapter extends ArrayAdapter<MBMIHistoric> {
         }
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        SPname = preferences.getString("name", "");
-        SPemail = preferences.getString("email", "");
-        SPweight = preferences.getString("weight", "");
-        SPheight = preferences.getString("height", "");
+        SPname = preferences.getString("Name", "");
+        SPemail = preferences.getString("Email", "");
+        SPweight = preferences.getString("Weight", "");
+        SPheight = preferences.getString("Height", "");
 
         TextView tvDay = (TextView) convertView.findViewById(R.id.textView7);
         TextView tvWeight = (TextView) convertView.findViewById(R.id.textView23);
@@ -51,6 +51,7 @@ public class BMIHistoricAdapter extends ArrayAdapter<MBMIHistoric> {
         tvDay.setText("Day "+ user.getDay());
         tvWeight.setText("Your weight was " +user.getWeight()+" kg");
         tvBMI.setText("Your BMI is "+ user.getBMI().substring(0,4));
+        //tvBMI.setText("Your BMI is "+ user.getBMI().substring(0,4));
         tvBMI_result.setText("So you are " + user.getBMI_result());
 
 
