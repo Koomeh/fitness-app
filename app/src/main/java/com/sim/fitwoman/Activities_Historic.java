@@ -38,7 +38,6 @@ public class Activities_Historic extends AppCompatActivity {
     List<MActivityHistoric> lstccM;
     List<MActivityHistoric> lstcs;
     private String PERSONAL_ACTIVITIES_API_URL = "http://10.0.2.2:8012/fitness/api/get-personal-activities.php";
-    private String IMAGES_DIR_URL = "http://10.0.2.2:8012/fitness/images/workouts/";
     String SPname, SPemail;
     EditText searchingActivity;
     @Override
@@ -90,14 +89,14 @@ public class Activities_Historic extends AppCompatActivity {
         listView.setEmptyView(nomeals);
         //3: get data from shared preferences
     }
-    
+
     private void loadActivities() {
 
         JSONObject postData = new JSONObject();
         Map<String, String> params = new HashMap<>();
         params.put("UserEmail", SPemail);
-
         postData = new JSONObject(params);
+
         JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, PERSONAL_ACTIVITIES_API_URL,postData,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -129,9 +128,6 @@ public class Activities_Historic extends AppCompatActivity {
                             ActivityHistoricAdapter adapter = new  ActivityHistoricAdapter(getApplicationContext(), R.layout.activities_historic_row,lstccM);
                             adapter.notifyDataSetChanged();
                             listView.setAdapter(adapter);
-
-
-
 
                         } catch (JSONException e) {
                             e.printStackTrace();

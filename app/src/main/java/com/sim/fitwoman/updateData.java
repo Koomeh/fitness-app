@@ -126,6 +126,7 @@ public class updateData extends AppCompatActivity {
 
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 params.put("UserId",preferences.getString("UserId", ""));
+                params.put("Email",preferences.getString("Email", ""));
                 return params;
             }
         };
