@@ -15,6 +15,7 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.sim.fitwoman.R;
@@ -36,7 +37,8 @@ public class Activities_Historic extends AppCompatActivity {
     ListView listView;
     List<MActivityHistoric> lstccM;
     List<MActivityHistoric> lstcs;
-    private static final String URL_Activities = "http://"+ WSadressIP.WSIP+"/FitWomanServices/getActivityByUser.php";
+    private String PERSONAL_ACTIVITIES_API_URL = "http://10.0.2.2:8012/fitness/api/get-personal-activities.php";
+    private String IMAGES_DIR_URL = "http://10.0.2.2:8012/fitness/images/workouts/";
     String SPname, SPemail;
     EditText searchingActivity;
     @Override
@@ -81,24 +83,28 @@ public class Activities_Historic extends AppCompatActivity {
                 }
         );
 
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SPname = preferences.getString("Name", "");
+        SPemail = preferences.getString("Email", "");
         loadActivities();
         listView.setEmptyView(nomeals);
         //3: get data from shared preferences
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        SPname = preferences.getString("name", "");
-        SPemail = preferences.getString("email", "");
-
     }
+    
     private void loadActivities() {
 
+        JSONObject postData = new JSONObject();
+        Map<String, String> params = new HashMap<>();
+        params.put("UserEmail", SPemail);
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_Activities,
-                new Response.Listener<String>() {
+        postData = new JSONObject(params);
+        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, PERSONAL_ACTIVITIES_API_URL,postData,
+                new Response.Listener<JSONObject>() {
                     @Override
-                    public void onResponse(String response) {
+                    public void onResponse(JSONObject response) {
                         try {
                             //converting the string to json array object
-                            JSONArray array = new JSONArray(response);
+                            JSONArray array = response.getJSONArray("activities");
 
                             //traversing through all the object
                             for (int i = 0; i < array.length(); i++) {
@@ -108,14 +114,14 @@ public class Activities_Historic extends AppCompatActivity {
 
                                 //adding the product to product list
                                 lstccM.add(new MActivityHistoric(
-                                        product.getInt("id"),
-                                        product.getString("name"),
+                                        product.getInt("PersonalActivityId"),
+                                        product.getString("Name"),
 
-                                        product.getString("day"),
+                                        product.getString("CreatedDate"),
 
-                                        product.getString("duration"),
+                                        product.getString("Duration"),
 
-                                        product.getString("burnedCalories")
+                                        product.getString("BurnedCalories")
                                 ));
                             }
 
@@ -138,17 +144,14 @@ public class Activities_Historic extends AppCompatActivity {
 
                     }
                 }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("Content-Type","application/x-www-form-urlencoded");
-
-
-
-                params.put("emailUser", SPemail);
-
-                return params;
-            }
+//            @Override
+//            protected Map<String, String> getParams() throws AuthFailureError {
+//                Map<String, String> params = new HashMap<>();
+//                params.put("Content-Type","application/x-www-form-urlencoded");
+//                params.put("emailUser", SPemail);
+//
+//                return params;
+//            }
         };;
 
         //adding our stringrequest to queue
