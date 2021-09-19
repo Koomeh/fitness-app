@@ -47,8 +47,8 @@ public class DietFragment extends Fragment {
     //private static  String URL_MEALS = "http://10.0.2.2:8012/fitness/api/get-meals.php";
     private static  String API_URL_GET_DIETS = "http://10.0.2.2:8012/fitness/api/get-diets.php";
     private String MEALSS_DIR_URL = "http://10.0.2.2:8012/fitness/images/meals/";
+	private static  String URL_MEALS = "http://10.0.2.2:8012/fitness/api/get-meals.php";
     String SharedPrefBMI;
-
 
     @Nullable
     @Override

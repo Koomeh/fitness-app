@@ -22,11 +22,13 @@ import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.sim.fitwoman.BMI_Historic;
 import com.sim.fitwoman.Home;
 import com.sim.fitwoman.MarwaFirstAddActivity;
 import com.sim.fitwoman.R;
 import com.sim.fitwoman.adapter.ActivityAdapter;
 
+import com.sim.fitwoman.adapter.BMIHistoricAdapter;
 import com.sim.fitwoman.model.MActivity;
 
 
@@ -35,6 +37,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.sim.fitwoman.model.MBMIHistoric;
 import com.sim.fitwoman.service.MySingleton;
 import com.sim.fitwoman.utils.WSadressIP;
 
@@ -58,6 +61,7 @@ public class ActivitiesFragment extends Fragment {
     List<MActivity> lstcc;
     private static final String URL_Activities = "http://"+ WSadressIP.WSIP+"/FitWomanServices/MgetActivityByUserDay.php";
     private static  String GET_PERSONAL_ACTIVITIES_API_URL = "http://10.0.2.2:8012/fitness/api/get-personal-activities.php";
+	private static  String DELETE_PERSONAL_ACTIVITY_API_URL = "http://10.0.2.2:8012/fitness/api/delete-activity.php";
     private String ACTIVITIES_DIR_URL = "http://10.0.2.2:8012/fitness/images/activities/";
     TextView TodayDay;
     String SPname, SPemail, SPweight;
@@ -247,40 +251,37 @@ public class ActivitiesFragment extends Fragment {
     }
 
     private void deleteActivity(final int id) {
-        final String   URL = "http://"+ WSadressIP.WSIP+"/FitWomanServices/MdeleteActivity.php";
+        JSONObject postData = new JSONObject();
+        Map<String, String> params = new HashMap<>();
+        params.put("PersonalActivityId", String.valueOf(id));
+        postData = new JSONObject(params);
+
+        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, DELETE_PERSONAL_ACTIVITY_API_URL,postData,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            //converting the string to json array object
+                            String errorfound = response.getString("errorfound");
+                            String msg = response.getString("message");
+                            //JSONArray array = response.getJSONArray("histories");
 
 
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
 
+                    }
+                }){
+        };;
 
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                if(response.contains("success")) {
-
-                   // loadActivities();
-
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getContext(),"failed to delete",Toast.LENGTH_SHORT).show();
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-                params.put("Content-Type","application/x-www-form-urlencoded");
-                params.put("id", String.valueOf(id));
-
-                return params;
-            }
-        };
-
-        MySingleton.getInstance(getContext()).addToRequestQueue(stringRequest);
-
+        //adding our stringrequest to queue
+        Volley.newRequestQueue(getContext()).add(stringRequest);
+        //MySingleton.getInstance(getContext()).addToRequestQueue(stringRequest);
     }
-
 }

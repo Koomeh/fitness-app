@@ -6,7 +6,9 @@ import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -112,16 +114,44 @@ public class MainActivity extends AppCompatActivity  {
         txtSignUp = findViewById(R.id.signUpTextView);
 
         btnLogin.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+            new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    while(true) {
+                        if(txtEmail.getText().toString().equals(""))
+                        {
+                            Toast.makeText(getApplicationContext(),"Enter Email", Toast.LENGTH_LONG).show();
+                            break;
+                        }
+
+                        boolean validEmail = isValidEmail(txtEmail.getText().toString());
+                        if(validEmail == false)
+                        {
+                            Toast.makeText(getApplicationContext(),"Wrong Email format", Toast.LENGTH_LONG).show();
+                            break;
+                        }
+                        if(txtPwd.getText().toString().equals(""))
+                        {
+                            Toast.makeText(getApplicationContext(),"Enter Password", Toast.LENGTH_LONG).show();
+                            break;
+                        }
+                        if(txtPwd.getText().toString().length() != 8)
+                        {
+                            Toast.makeText(getApplicationContext(),"Password too short", Toast.LENGTH_LONG).show();
+                            break;
+                        }
                         loginUser();
+                        break;
                     }
                 }
+            }
         );
         goToSignUp();
     }
 
+    private boolean isValidEmail(CharSequence target) {
+        return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
+    }
 
     public void loginUser(){
         StringRequest stringRequest = new StringRequest(Request.Method.POST, LOGIN_REGISTRATION_API_URL, new Response.Listener<String>() {

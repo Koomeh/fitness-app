@@ -116,12 +116,23 @@ public class MarwaAdd extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(!Aduration.getText().toString().equals("") ){
+                        while(true)
+                        {
+                            if(Aduration.getText().toString().equals(""))
+                            {
+                                Toast.makeText(getApplicationContext(),"Enter Activity Duration",Toast.LENGTH_SHORT).show();
+                                break;
+                            }
+
+                            int duration = Integer.valueOf(Aduration.getText().toString());
+                            if(duration > 180)
+                            {
+                                Toast.makeText(getApplicationContext(),"Activity Duration cannot be more than 180 Minutes!",Toast.LENGTH_SHORT).show();
+                                break;
+                            }
 
                             WSAddActivity();
-
-                        }else{
-                            Toast.makeText(getApplicationContext(),"Enter Activity Duration",Toast.LENGTH_SHORT).show();
+                            break;
                         }
                     }
                 }

@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -95,9 +97,92 @@ public class Sign_up extends AppCompatActivity implements Response.Listener, Res
                 @Override
                 public void onClick(View v) {
                 if(!etName.getText().toString().equals("") && !etEmail.getText().toString().equals("") && !etPwd.getText().toString().equals("")){
+//PUTTING RANGE VALUES FOR THE SIGN UP SCREEN
+                    while(true) {
+                        if(etEmail.getText().toString().equals(""))
+                        {
+                            Toast.makeText(getApplicationContext(),"Enter Email", Toast.LENGTH_LONG).show();
+                            break;
+                        }
 
-                    //dontExist();
-                    addThisUser();
+                        boolean validEmail = isValidEmail(etEmail.getText().toString());
+                        if(validEmail == false)
+                        {
+                            Toast.makeText(getApplicationContext(),"Wrong Email format", Toast.LENGTH_LONG).show();
+                            break;
+                        }
+                        if(etPwd.getText().toString().equals(""))
+                        {
+                            Toast.makeText(getApplicationContext(),"Enter Password", Toast.LENGTH_LONG).show();
+                            break;
+                        }
+                        if(etPwd.getText().toString().length()<8)
+                        {
+                            Toast.makeText(getApplicationContext(),"Password too short, password should have 8 characters", Toast.LENGTH_LONG).show();
+                            break;
+                        }
+                        if(etPwd.getText().toString().length()>8)
+                        {
+                            Toast.makeText(getApplicationContext(),"Password too long, password should have 8 characters", Toast.LENGTH_LONG).show();
+                            break;
+                        }
+                        if(etName.getText().toString().equals(""))
+                        {
+                            Toast.makeText(getApplicationContext(),"Enter Name", Toast.LENGTH_LONG).show();
+                            break;
+                        }
+                        if(etAge.getText().toString().equals(""))
+                        {
+                            Toast.makeText(getApplicationContext(),"Enter Age", Toast.LENGTH_LONG).show();
+                            break;
+                        }
+                        if(Integer.parseInt(etAge.getText().toString()) < 13)
+                        {
+                            Toast.makeText(getApplicationContext(),"Age is invalid, should be more than 13", Toast.LENGTH_LONG).show();
+                            break;
+                        }
+                        if(Integer.parseInt(etAge.getText().toString()) > 100)
+                        {
+                            Toast.makeText(getApplicationContext(),"Age is invalid, should be less than 100", Toast.LENGTH_LONG).show();
+                            break;
+                        }
+                        if(etMobileNo.getText().toString().equals(""))
+                        {
+                            Toast.makeText(getApplicationContext(),"Enter Mobile No", Toast.LENGTH_LONG).show();
+                            break;
+                        }
+                        if(etMobileNo.getText().toString().length() > 15 )
+                        {
+                            Toast.makeText(getApplicationContext(),"MobileNo too Long, less than 10 characters", Toast.LENGTH_LONG).show();
+                            break;
+                        }
+                        if(etMobileNo.getText().toString().length() < 10 ) {
+                            Toast.makeText(getApplicationContext(), "MobileNo too Short, should be 10 characters", Toast.LENGTH_LONG).show();
+                            break;
+                        }
+                        if(Integer.parseInt(etWeight.getText().toString()) > 300)
+                        {
+                            Toast.makeText(getApplicationContext(),"Weight is invalid, should be less than 300KG", Toast.LENGTH_LONG).show();
+                            break;
+                        }
+                        if(Integer.parseInt(etWeight.getText().toString()) < 30)
+                        {
+                            Toast.makeText(getApplicationContext(),"Weight is invalid, should be more than 30KG", Toast.LENGTH_LONG).show();
+                            break;
+                        }
+                        if(Double.parseDouble(etHeight.getText().toString()) < 62.8)
+                        {
+                            Toast.makeText(getApplicationContext(),"Height is invalid, should be more than 62.8 CM", Toast.LENGTH_LONG).show();
+                            break;
+                        }
+                        if(Double.parseDouble(etHeight.getText().toString()) > 213)
+                        {
+                            Toast.makeText(getApplicationContext(),"Height is invalid, should be less than 213 CM", Toast.LENGTH_LONG).show();
+                            break;
+                        }
+                        addThisUser();
+                        break;
+                    }
 
                 }else{
                 Toast.makeText(getApplicationContext(),"Fill all data before register",Toast.LENGTH_SHORT).show();
@@ -108,7 +193,9 @@ public class Sign_up extends AppCompatActivity implements Response.Listener, Res
         );
     }
 
-
+    private boolean isValidEmail(CharSequence target) {
+        return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
+    }
 
     public void dontExist(){
 

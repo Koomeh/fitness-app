@@ -1,6 +1,8 @@
 package com.sim.fitwoman;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -107,6 +109,13 @@ private DrawerLayout drawer;
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfilFragment()).commit();
                 getSupportActionBar().setTitle("Profil");
                 break;
+            case R.id.nav_logout:
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                preferences.edit().clear();
+                preferences.edit().apply();
+                Intent intent = new Intent(this,MainActivity.class);
+                startActivity(intent);
+
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;

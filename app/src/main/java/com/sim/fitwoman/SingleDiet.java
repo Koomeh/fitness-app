@@ -59,7 +59,7 @@ public class SingleDiet extends AppCompatActivity {
 
 
 
-        String theImage_URL = "http://"+ WSadressIP.WSIP+"/"+this.getIntent().getStringExtra("imageS");
+        String theImage_URL = this.getIntent().getStringExtra("imageS");
 
 
 

@@ -151,7 +151,7 @@ public class FitnessFragment extends Fragment {
                                     workout.getString("Description").substring(0, 80),
                                     IMAGES_DIR_URL + workout.getString("Image"),
                                   "",
-                                  ""
+                                    workout.getString("Mistakes")
                                   // product.getString("Steps"),
                                     //workout.getString("Video"),
                                     //workout.getString("mistakes")

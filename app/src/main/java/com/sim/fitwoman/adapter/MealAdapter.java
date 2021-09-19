@@ -16,12 +16,17 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.sim.fitwoman.Home;
 import com.sim.fitwoman.R;
 import com.sim.fitwoman.model.Meal;
 import com.sim.fitwoman.service.MySingleton;
 import com.sim.fitwoman.utils.WSadressIP;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -34,6 +39,7 @@ public class MealAdapter extends ArrayAdapter<Meal>  {
 
         Context context;
         int resource;
+        private static  String DELETE_MEAL_API_URL = "http://10.0.2.2:8012/fitness/api/delete-meal.php";
 
 public MealAdapter(@NonNull Context context, int resource, @NonNull List<Meal> objects) {
         super(context, resource, objects);
@@ -102,14 +108,43 @@ public View getView(final int position, View convertView, @NonNull ViewGroup par
         return v;
         }
 
-
         private void deleteMeal(final int id) {
+                JSONObject postData = new JSONObject();
+                Map<String, String> params = new HashMap<>();
+                params.put("MealId", String.valueOf(id));
+                postData = new JSONObject(params);
+
+                JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, DELETE_MEAL_API_URL,postData,
+                        new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                        try {
+                                                //converting the string to json array object
+                                                String errorfound = response.getString("errorfound");
+                                                String msg = response.getString("message");
+                                                //JSONArray array = response.getJSONArray("histories");
+
+
+                                        } catch (JSONException e) {
+                                                e.printStackTrace();
+                                        }
+                                }
+                        },
+                        new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+
+                                }
+                        }){
+                };;
+
+                //adding our stringrequest to queue
+                Volley.newRequestQueue(getContext()).add(stringRequest);
+                //MySingleton.getInstance(getContext()).addToRequestQueue(stringRequest);
+        }
+
+        private void deleteMeal_2(final int id) {
                 final String   URL = "http://"+ WSadressIP.WSIP+"/FitWomanServices/Meal/deleteMeal.php";
-
-
-
-
-
                 StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {

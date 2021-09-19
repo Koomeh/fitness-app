@@ -1,5 +1,7 @@
 package com.sim.fitwoman;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -31,6 +33,7 @@ public class addToMealForDetails extends AppCompatActivity {
     int idMeal=0;
 
     private static final String URL_Activities = "http://"+ WSadressIP.WSIP+"/FitWomanServices/Meal/addIngredientTomealForDetails.php";
+    private static String UPDATE_MEALS_API_URL = "http://10.0.2.2:8012/fitness/api/update-meal.php";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +71,7 @@ public class addToMealForDetails extends AppCompatActivity {
                // Toast.makeText(addToMealForDetails.this, "id : "+id, Toast.LENGTH_LONG).show();
               //  Toast.makeText(addToMealForDetails.this, "id : "+idMeal, Toast.LENGTH_LONG).show();
 
-                StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_Activities,
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, UPDATE_MEALS_API_URL,
                         new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
@@ -100,11 +103,16 @@ public class addToMealForDetails extends AppCompatActivity {
                         Map<String, String> params = new HashMap<>();
                         params.put("Content-Type","application/x-www-form-urlencoded");
 
-                        params.put("name", tv_name.getText().toString());
-                        params.put("calories", tv_cal.getText().toString());
-                        params.put("quantity", getquantity.getText().toString() );
-                        params.put("idIngredient", String.valueOf(id));
-                        params.put("idMeal", String.valueOf(idMeal));
+                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(addToMealForDetails.this);
+
+                        String SPemail = preferences.getString("Email", "");
+                        String mealType = preferences.getString("mealType", "");
+                        params.put("Name", tv_name.getText().toString());
+                        params.put("Calories", tv_cal.getText().toString());
+                        params.put("Quantity", getquantity.getText().toString() );
+                        params.put("IngredientId", String.valueOf(id));
+                        params.put("UserEmail", SPemail);
+                        params.put("MealType", mealType);
 
 
                         return params;
